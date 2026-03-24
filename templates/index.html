@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}ОВСЧ — Главная{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Поиск по вопросам ОВСЧ</h1>
+    <p style="margin: 16px 0; line-height: 1.6; color: #555;">
+        База из <strong>{{ doc_count }}</strong> вопросов Открытого Всероссийского Синхронного Чемпионата
+        по спортивному «Что? Где? Когда?». Поддерживаются три метода поиска:
+        BM25, word2vec и navec.
+    </p>
+    <ul style="margin: 0 0 24px 20px; line-height: 2; color: #555;">
+        <li><strong>BM25</strong> — классический полнотекстовый поиск</li>
+        <li><strong>word2vec</strong> — семантический поиск через усреднённые векторы слов</li>
+        <li><strong>navec</strong> — компактная альтернатива word2vec</li>
+    </ul>
+    <a href="/search" class="btn">Перейти к поиску →</a>
+</div>
+{% endblock %}

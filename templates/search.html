@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Поиск{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Поиск</h2>
+    <form action="/results" method="get">
+        <div style="margin-bottom: 16px;">
+            <input type="text" name="query" value="{{ query or '' }}" placeholder="пушкин стихи"
+                   style="width:100%; padding:10px 14px; border:1px solid #ddd; border-radius:6px; font-size:15px;">
+        </div>
+        <div style="display:flex; gap:24px; margin-bottom:20px; flex-wrap:wrap;">
+            <div>
+                <label style="display:block; margin-bottom:6px; font-weight:500;">Метод</label>
+                <select name="method" style="padding:8px 12px; border:1px solid #ddd; border-radius:6px; font-size:15px;">
+                    {% for m in ['bm25', 'word2vec', 'navec'] %}
+                    <option value="{{ m }}" {% if method == m %}selected{% endif %}>{{ m }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label style="display:block; margin-bottom:6px; font-weight:500;">Результатов</label>
+                <input type="number" name="top_n" value="{{ top_n or 5 }}" min="1" max="50"
+                       style="width:80px; padding:8px 12px; border:1px solid #ddd; border-radius:6px; font-size:15px;">
+            </div>
+            <div style="display:flex; align-items:flex-end;">
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:500; padding-bottom:8px;">
+                    <input type="checkbox" name="spellcheck" value="1" {% if spellcheck %}checked{% endif %}>
+                    Исправить опечатки
+                </label>
+            </div>
+        </div>
+        <button type="submit" class="btn">Найти</button>
+    </form>
+</div>
+{% endblock %}

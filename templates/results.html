@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+
+{% if corrected %}
+<div class="notice">Запрос исправлен: «{{ original_query }}» → «{{ query }}»</div>
+{% endif %}
+
+<div class="card">
+    <h2>{{ page_title }}</h2>
+
+    {% if is_recommend %}
+    <div style="background:#f8f8f8; border-radius:6px; padding:12px 16px; margin-bottom:20px; font-size:14px; color:#555; line-height:1.5;">
+        {{ query }}
+    </div>
+    {% endif %}
+
+    <p style="color:#777; margin-bottom:20px; font-size:14px;">
+        Метод: <strong>{{ method }}</strong> ·
+        найдено за <strong>{{ "%.1f"|format(elapsed * 1000) }} мс</strong> ·
+        <a href="/search?query={{ original_query }}&method={{ method }}&top_n={{ top_n }}"
+           style="color:#2c3e50;">← Новый поиск</a>
+    </p>
+
+    {% if results %}
+        {% for r in results %}
+        <div style="border:1px solid #eee; border-radius:8px; padding:16px; margin-bottom:12px;">
+
+            {# Сезон сверху #}
+            {% if r.season %}
+            <div style="font-size:12px; color:#999; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">
+                {{ r.season }}
+            </div>
+            {% endif %}
+
+            {# Текст вопроса #}
+            <div style="line-height:1.6; color:#222; margin-bottom:10px;">{{ r.doc }}</div>
+
+            {# Автор и кнопка снизу #}
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                <div style="font-size:13px; color:#888;">
+                    {% if r.authors %}✍️ {{ r.authors }}{% endif %}
+                    <span style="margin-left:12px; color:#bbb;">{{ "%.3f"|format(r.score) }}</span>
+                </div>
+                <a href="/recommend?doc={{ r.doc | urlencode }}&method={{ method }}&top_n={{ top_n }}"
+                   style="font-size:13px; color:#2c3e50; border:1px solid #ccc; border-radius:4px;
+                          padding:4px 10px; text-decoration:none; white-space:nowrap;">
+                    Найти похожие →
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="color:#888;">Ничего не найдено. Попробуйте другой запрос или метод.</p>
+    {% endif %}
+</div>
+
+{% endblock %}
